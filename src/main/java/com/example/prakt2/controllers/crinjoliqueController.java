@@ -7,17 +7,14 @@ import com.example.prakt2.repos.flexik_repo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/crinjolique")
 public class crinjoliqueController {
-
-
-
 
         @Autowired
         private crinjolique_repo crinjRepo;
@@ -63,6 +60,54 @@ public class crinjoliqueController {
 
         }
 
+
+    @GetMapping("/{id}")
+    public String read (@PathVariable("id") Long id, Model model) {
+        Optional<crinjolique> cringe = crinjRepo.findById(id);
+        ArrayList<crinjolique> arrayList = new ArrayList<>();
+        cringe.ifPresent(arrayList::add);
+        model.addAttribute("crinjolique", arrayList);
+        return "crinjolique/checkcringe";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete (@PathVariable("id") Long id, Model model) {
+        crinjRepo.deleteById(id);
+        return "redirect:/crinjolique/check";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit (@PathVariable("id") Long id,
+                        Model model) {
+        if (!crinjRepo.existsById(id)) {
+            return "redirect:/crinjolique/check";
+        }
+        Optional<crinjolique> flexik = crinjRepo.findById(id);
+        ArrayList<crinjolique> arrayList = new ArrayList<>();
+        flexik.ifPresent(arrayList::add);
+        model.addAttribute("crinjolique", arrayList);
+        return "crinjolique/edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String edit (@PathVariable("id") Long id,
+                        @RequestParam("title") String title,
+                        @RequestParam("sub") String sub,
+                        @RequestParam("type") String type,
+                        @RequestParam("aboba") String aboba,
+                        @RequestParam("flexStatus") String status,
+                        Model model) {
+        crinjolique crinj = crinjRepo.findById(id).orElseThrow();
+        var cringe = new crinjolique(title, sub, type, aboba, status);
+        crinj.setIsCringe(title);
+        crinj.setCrinjeModifier(sub);
+        crinj.setCrinjeCount(aboba);
+        crinj.setEshePole(type);
+        crinj.setEsheodnoPole(status);
+
+        crinjRepo.save(crinj);
+        return "redirect:/crinjolique/check";
+    }
 
 
 

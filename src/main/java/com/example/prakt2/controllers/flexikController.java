@@ -5,10 +5,10 @@ import com.example.prakt2.repos.flexik_repo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/flexiki")
@@ -57,6 +57,55 @@ public class flexikController {
 
     }
 
+
+    @GetMapping("/{id}")
+    public String read (@PathVariable("id") Long id, Model model) {
+        Optional<flexik> flexik = flexikRepo.findById(id);
+        ArrayList<flexik> arrayList = new ArrayList<>();
+        flexik.ifPresent(arrayList::add);
+        model.addAttribute("flexiki", arrayList);
+        return "flexi/checkflex";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete (@PathVariable("id") Long id, Model model) {
+        flexikRepo.deleteById(id);
+        return "redirect:/flexiki/check";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit (@PathVariable("id") Long id,
+                        Model model) {
+        if (!flexikRepo.existsById(id)) {
+            return "redirect:/flexiki/check";
+        }
+        Optional<flexik> flexik = flexikRepo.findById(id);
+        ArrayList<flexik> arrayList = new ArrayList<>();
+        flexik.ifPresent(arrayList::add);
+        model.addAttribute("flexiki", arrayList);
+        return "flexi/edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String edit (@PathVariable("id") Long id,
+                        @RequestParam("title") String title,
+                        @RequestParam("sub") String sub,
+                        @RequestParam("type") String type,
+                        @RequestParam("aboba") String aboba,
+                        @RequestParam("flexStatus") String status,
+                        Model model) {
+
+        flexik flexik = flexikRepo.findById(id).orElseThrow();
+
+        flexik.setFlexTitle(title);
+        flexik.setFlexSub(sub);
+        flexik.setAbobaAmount(aboba);
+        flexik.setFlexType(type);
+        flexik.setIsFlexing(status);
+
+        flexikRepo.save(flexik);
+        return "redirect:/flexiki/check";
+    }
 
 
 
