@@ -18,24 +18,23 @@
             <div class="card">
                 <div class="card-body">
                     <div class="tenor-gif-embed" data-postid="24074522" data-share-method="host" data-aspect-ratio="0.559375" data-width="100%"><a href="https://tenor.com/view/samin-gif-24074522">Samin GIF</a>from <a href="https://tenor.com/search/samin-gifs">Samin GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
-                <h5 class="card-title" th:text="${el.flexTitle}"></h5>
+                    <a th:href="'/flexiki/' + ${el.id}">
+                    <h5 class="card-title" th:text="${el.flexTitle}"></h5>
+                        </a>
                     <h6 class="card-subtitle mb-2 text-muted" th:text="${el.flexSub}"></h6>
                     <p class="card-text" th:text="${el.isFlexing}"></p>
                     <div class="row">
                         <div class="d-flex align-items-center col-6">
-
                             <span class="card-subtitle text-muted fs-6 ms-2" th:text=" 'Тип флекса: ' + ${el.flexType}"></span>
                         </div>
                         <div class="d-flex align-items-center col-6">
-
                             <span class="card-subtitle text-muted fs-6 ms-2" th:text=" 'Колличество абоб: ' + ${el.abobaAmount}"></span>
                         </div>
-
                     </div>
                 </div>
             </div>
-            <a th:href="'delete/' + ${el.id}" class="btn btn-danger me-2">Delete</a>
-            <a th:href="'edit/' + ${el.id}" class="btn btn-warning">Edit</a>
+            <a th:href="'delete/' + ${el.id}" class="btn btn-primary mt-3">Удалить</a>
+            <a th:href="'edit/' + ${el.id}" class="btn btn-primary mt-3">Изменить</a>
         </div>
     </div>
 </div>

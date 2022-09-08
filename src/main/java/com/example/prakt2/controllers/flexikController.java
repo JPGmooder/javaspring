@@ -64,7 +64,7 @@ public class flexikController {
         ArrayList<flexik> arrayList = new ArrayList<>();
         flexik.ifPresent(arrayList::add);
         model.addAttribute("flexiki", arrayList);
-        return "flexi/checkflex";
+        return "flexi/single";
     }
 
     @GetMapping("/delete/{id}")

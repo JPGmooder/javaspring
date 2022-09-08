@@ -18,9 +18,14 @@
             <div class="card">
                 <div class="card-body">
                     <div class="tenor-gif-embed" data-postid="24074522" data-share-method="host" data-aspect-ratio="0.559375" data-width="100%"><a href="https://tenor.com/view/samin-gif-24074522">Samin GIF</a>from <a href="https://tenor.com/search/samin-gifs">Samin GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+                    <a th:href="'/crinjolique/' + ${el.id}">
+
                     <h5 class="card-title" th:text="${el.isCringe}"></h5>
+                    </a>
+
                     <h6 class="card-subtitle mb-2 text-muted" th:text="${el.crinjeModifier}"></h6>
                     <p class="card-text" th:text="${el.crinjeCount}"></p>
+
                     <div class="row">
                         <div class="d-flex align-items-center col-6">
 
@@ -33,8 +38,8 @@
 
                     </div>
                 </div>
-                <a th:href="'delete/' + ${el.id}" class="btn btn-danger me-2">Delete</a>
-                <a th:href="'edit/' + ${el.id}" class="btn btn-warning">Edit</a>
+                <a th:href="'delete/' + ${el.id}" class="btn btn-primary mt-3">Удалить</a>
+                <a th:href="'edit/' + ${el.id}" class="btn btn-primary mt-3">Изменить</a>
             </div>
 
         </div>

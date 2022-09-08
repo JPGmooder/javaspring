@@ -66,8 +66,8 @@ public class crinjoliqueController {
         Optional<crinjolique> cringe = crinjRepo.findById(id);
         ArrayList<crinjolique> arrayList = new ArrayList<>();
         cringe.ifPresent(arrayList::add);
-        model.addAttribute("crinjolique", arrayList);
-        return "crinjolique/checkcringe";
+        model.addAttribute("flexiki", arrayList);
+        return "crinjolique/single";
     }
 
     @GetMapping("/delete/{id}")
@@ -82,9 +82,9 @@ public class crinjoliqueController {
         if (!crinjRepo.existsById(id)) {
             return "redirect:/crinjolique/check";
         }
-        Optional<crinjolique> flexik = crinjRepo.findById(id);
+        Optional<crinjolique> crinjolique = crinjRepo.findById(id);
         ArrayList<crinjolique> arrayList = new ArrayList<>();
-        flexik.ifPresent(arrayList::add);
+        crinjolique.ifPresent(arrayList::add);
         model.addAttribute("crinjolique", arrayList);
         return "crinjolique/edit";
     }
