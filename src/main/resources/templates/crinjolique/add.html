@@ -41,26 +41,31 @@
   </div>
 </nav>
 <div class="container">
-  <form action="save" method="post" class="d-flex flex-column align-items-center">
+  <form th:object="${crinjolique}" action="save" method="post" class="d-flex flex-column align-items-center">
     <div class="mb-3">
       <label for="title">Имя кринжа</label>
-      <input class="form-control"  type="text" name="title" id="title"/>
+      <input class="form-control"  type="text" th:field="*{isCringe}" id="title" />
+      <div th:if="${#fields.hasErrors('isCringe')}" th:errors="*{isCringe}"></div>
     </div>
     <div class="mb-3">
       <label for="sub">Кринжовиность</label>
-      <input class="form-control"  type="text" name="sub" id="sub"/>
+      <input class="form-control"  type="text" th:field="*{crinjeModifier}" id="sub" />
+      <div th:if="${#fields.hasErrors('crinjeModifier')}" th:errors="*{crinjeModifier}"></div>
     </div>
     <div class="mb-3">
       <label for="type">Вариация кринжа</label>
-      <input class="form-control"  type="text" name="type" id="type"/>
+      <input class="form-control"  type="text" th:field="*{crinjeCount}" id="type" />
+      <div th:if="${#fields.hasErrors('crinjeCount')}" th:errors="*{crinjeCount}"></div>
     </div>
     <div class="mb-3">
       <label for="aboba">Адрес кринжа</label>
-      <input class="form-control"  type="number" name="aboba" id="aboba"/>
+      <input class="form-control"  type="text" th:field="*{eshePole}" id="aboba" />
+      <div th:if="${#fields.hasErrors('eshePole')}" th:errors="*{eshePole}"></div>
     </div>
     <div class="mb-3">
       <label for="flexStatus">Статус Кринжа</label>
-      <input class="form-control"  type="text" name="flexStatus" id="flexStatus"/>
+      <input class="form-control"  type="text" th:field="*{esheodnoPole}" id="flexStatus" />
+      <div th:if="${#fields.hasErrors('esheodnoPole')}" th:errors="*{esheodnoPole}"></div>
     </div>
     <button  type="submit" class="btn btn-primary">Создать кринжовинку</button>
   </form>

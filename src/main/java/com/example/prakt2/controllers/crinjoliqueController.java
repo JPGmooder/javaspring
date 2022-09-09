@@ -7,8 +7,10 @@ import com.example.prakt2.repos.flexik_repo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -25,7 +27,8 @@ public class crinjoliqueController {
         }
 
         @GetMapping("/add")
-        String addFlexique() {
+        String addFlexique(Model model, crinjolique crinjolique) {
+            model.addAttribute("crinjolique", crinjolique);
             return "crinjolique/add";
         }
 
@@ -45,20 +48,34 @@ public class crinjoliqueController {
             return "crinjolique/checkcringe";
         }
 
-        @PostMapping("/save")
-        String createFlex(@RequestParam(value = "title", required = false) String title,
-                          @RequestParam(value = "sub", required = false) String sub,
-                          @RequestParam(value = "type", required = false) String type,
-                          @RequestParam(value = "aboba", required = false) String aboba,
-                          @RequestParam(value = "flexStatus", required = false) String flexedtitle,
-                          Model model) {
+//        @PostMapping("/save")
+//        String createFlex(@RequestParam(value = "title", required = false) String title,
+//                          @RequestParam(value = "sub", required = false) String sub,
+//                          @RequestParam(value = "type", required = false) String type,
+//                          @RequestParam(value = "aboba", required = false) String aboba,
+//                          @RequestParam(value = "flexStatus", required = false) String flexedtitle,
+//                          Model model) {
+//
+//            crinjolique newFlex = new crinjolique(title, sub, type, aboba, flexedtitle);
+//
+//            crinjRepo.save(newFlex);
+//            return "crinjolique/crinjolique";
+//
+//        }
 
-            crinjolique newFlex = new crinjolique(title, sub, type, aboba, flexedtitle);
+    @PostMapping("/save")
+    String createFlex(@ModelAttribute @Valid crinjolique flexiki,
+                      BindingResult bindingResult,
+                      Model model) {
 
-            crinjRepo.save(newFlex);
-            return "crinjolique/crinjolique";
-
+        if (bindingResult.hasErrors())
+        {
+            model.addAttribute("crinjolique", flexiki);
+            return "crinjolique/add";
         }
+        crinjRepo.save(flexiki);
+        return "crinjolique/crinjolique";
+    }
 
 
     @GetMapping("/{id}")
@@ -83,31 +100,31 @@ public class crinjoliqueController {
             return "redirect:/crinjolique/check";
         }
         Optional<crinjolique> crinjolique = crinjRepo.findById(id);
-        ArrayList<crinjolique> arrayList = new ArrayList<>();
-        crinjolique.ifPresent(arrayList::add);
-        model.addAttribute("crinjolique", arrayList);
+        model.addAttribute("crinjolique", crinjolique.get());
         return "crinjolique/edit";
     }
 
     @PostMapping("/edit/{id}")
-    public String edit (@PathVariable("id") Long id,
-                        @RequestParam("title") String title,
-                        @RequestParam("sub") String sub,
-                        @RequestParam("type") String type,
-                        @RequestParam("aboba") String aboba,
-                        @RequestParam("flexStatus") String status,
+    public String edit (@PathVariable("id") Long id, @ModelAttribute @Valid crinjolique crinjolique,
+                        BindingResult bindingResult,
                         Model model) {
-        crinjolique crinj = crinjRepo.findById(id).orElseThrow();
-        var cringe = new crinjolique(title, sub, type, aboba, status);
-        crinj.setIsCringe(title);
-        crinj.setCrinjeModifier(sub);
-        crinj.setCrinjeCount(aboba);
-        crinj.setEshePole(type);
-        crinj.setEsheodnoPole(status);
 
+        if (bindingResult.hasErrors())
+        {
+            model.addAttribute("crinjolique", crinjolique);
+            return "crinjolique/edit";
+        }
+        crinjolique crinj = crinjRepo.findById(id).orElseThrow();
+        crinj.setIsCringe(crinjolique.isCringe);
+        crinj.setCrinjeModifier(crinjolique.crinjeModifier);
+        crinj.setCrinjeCount(crinjolique.crinjeCount);
+        crinj.setEshePole(crinjolique.eshePole);
+        crinj.setEsheodnoPole(crinjolique.esheodnoPole);
         crinjRepo.save(crinj);
         return "redirect:/crinjolique/check";
     }
+
+
 
 
 

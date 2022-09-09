@@ -3,6 +3,9 @@ package com.example.prakt2.models;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class crinjolique {
@@ -69,11 +72,19 @@ public class crinjolique {
     public void setEsheodnoPole(String esheodnoPole) {
         this.esheodnoPole = esheodnoPole;
     }
-
+    @NotEmpty(message = "Поле не должно быть пустым")
+    @Size(message = "Строка должна быть длиннее 4 символов и короче 16", min = 5, max = 15)
     public String isCringe;
+    @NotEmpty(message = "Поле не должно быть пустым")
     public String crinjeModifier;
+    @NotEmpty(message = "Поле не должно быть пустым")
+
     public String crinjeCount;
+    @NotEmpty(message = "Поле не должно быть пустым")
+
     public String eshePole;
+    @NotEmpty(message = "Поле не должно быть пустым")
+
     public String esheodnoPole;
 
 

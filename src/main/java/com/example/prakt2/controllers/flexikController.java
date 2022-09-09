@@ -5,8 +5,10 @@ import com.example.prakt2.repos.flexik_repo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -23,7 +25,8 @@ public class flexikController {
     }
 
     @GetMapping("/add")
-    String addFlexique() {
+    String addFlexique(Model model, flexik flexiki) {
+        model.addAttribute("flexiki", flexiki);
         return "flexi/add";
     }
 
@@ -42,21 +45,35 @@ public class flexikController {
         return "/flexi/checkflex";
     }
 
+//    @PostMapping("/save")
+//    String createFlex(@RequestParam(value = "title", required = false) String title,
+//                    @RequestParam(value = "sub", required = false) String sub,
+//                    @RequestParam(value = "type", required = false) String type,
+//                    @RequestParam(value = "aboba", required = false) String aboba,
+//                    @RequestParam(value = "flexStatus", required = false) String flexedtitle,
+//                    Model model) {
+//
+//        flexik newFlex = new flexik(title, sub, type, aboba, flexedtitle);
+//
+//        flexikRepo.save(newFlex);
+//        return "flexi/flexik";
+//
+//    }
+
     @PostMapping("/save")
-    String createFlex(@RequestParam(value = "title", required = false) String title,
-                    @RequestParam(value = "sub", required = false) String sub,
-                    @RequestParam(value = "type", required = false) String type,
-                    @RequestParam(value = "aboba", required = false) String aboba,
-                    @RequestParam(value = "flexStatus", required = false) String flexedtitle,
-                    Model model) {
+    String createFlex(@ModelAttribute @Valid flexik flexiki,
+                      BindingResult bindingResult,
+                      Model model) {
 
-        flexik newFlex = new flexik(title, sub, type, aboba, flexedtitle);
-
-        flexikRepo.save(newFlex);
+        if (bindingResult.hasErrors())
+        {
+            model.addAttribute("flexiki", flexiki);
+            return "flexi/add";
+        }
+        flexikRepo.save(flexiki);
         return "flexi/flexik";
 
     }
-
 
     @GetMapping("/{id}")
     public String read (@PathVariable("id") Long id, Model model) {
@@ -80,13 +97,11 @@ public class flexikController {
             return "redirect:/flexiki/check";
         }
         Optional<flexik> flexik = flexikRepo.findById(id);
-        ArrayList<flexik> arrayList = new ArrayList<>();
-        flexik.ifPresent(arrayList::add);
-        model.addAttribute("flexiki", arrayList);
+        model.addAttribute("flexiki", flexik.get());
         return "flexi/edit";
     }
 
-    @PostMapping("/edit/{id}")
+    /*@PostMapping("/edit/{id}")
     public String edit (@PathVariable("id") Long id,
                         @RequestParam("title") String title,
                         @RequestParam("sub") String sub,
@@ -105,6 +120,29 @@ public class flexikController {
 
         flexikRepo.save(flexik);
         return "redirect:/flexiki/check";
+    }*/
+
+    @PostMapping("/edit/{id}")
+    String edit(@PathVariable("id") Long id, @ModelAttribute @Valid flexik flexiki,
+                      BindingResult bindingResult,
+                      Model model) {
+
+        if (bindingResult.hasErrors())
+        {
+            model.addAttribute("flexiki", flexiki);
+            return "redirect:/flexi/edit/{id}";
+        }
+
+        flexik flexik = flexikRepo.findById(id).orElseThrow();
+
+        flexik.setFlexTitle(flexiki.getFlexTitle());
+        flexik.setFlexSub(flexiki.getFlexSub());
+        flexik.setAbobaAmount(flexiki.getAbobaAmount());
+        flexik.setFlexType(flexiki.getFlexType());
+        flexik.setIsFlexing(flexiki.getIsFlexing());
+        flexikRepo.save(flexik);
+        return "flexi/flexik";
+
     }
 
 

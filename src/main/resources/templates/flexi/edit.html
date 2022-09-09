@@ -11,35 +11,38 @@
 
 
 
-<div class="container" th:each="el : ${flexiki}">
 
-    <form th:action="'/flexiki/edit/' + ${el.id}" method="post">
+    <form th:object="${flexiki}" th:action="'/flexiki/edit/' + ${id}" method="post">
     <div class="container">
             <div class="mb-3">
                 <label for="title">Заголовок</label>
-                <input class="form-control"  type="text" name="title" id="title"  th:value="${el.flexTitle}"/>
+                <input class="form-control"  type="text" th:field="*{flexTitle}" id="title" />
+                <div th:if="${#fields.hasErrors('flexTitle')}" th:errors="*{flexTitle}"></div>
             </div>
             <div class="mb-3">
                 <label for="sub">Подпись</label>
-                <input class="form-control"  type="text" name="sub" id="sub" th:value="${el.flexSub}"/>
+                <input class="form-control"  type="text" th:field="*{flexSub}" id="sub" />
+                <div th:if="${#fields.hasErrors('flexSub')}" th:errors="*{flexSub}"></div>
             </div>
             <div class="mb-3">
                 <label for="type">Тип</label>
-                <input class="form-control"  type="text" name="type" id="type" th:value="${el.flexType}"/>
+                <input class="form-control"  type="text" th:field="*{flexType}" id="type" />
+                <div th:if="${#fields.hasErrors('flexType')}" th:errors="*{flexType}"></div>
             </div>
             <div class="mb-3">
                 <label for="aboba">Колличество абоб</label>
-                <input class="form-control"  type="number" name="aboba" id="aboba" th:value="${el.abobaAmount}"/>
+                <input class="form-control"  type="text" th:field="*{abobaAmount}" id="aboba" />
+                <div th:if="${#fields.hasErrors('abobaAmount')}" th:errors="*{abobaAmount}"></div>
             </div>
             <div class="mb-3">
                 <label for="flexStatus">Статус флекса</label>
-                <input class="form-control"  type="text" name="flexStatus" id="flexStatus" th:value="${el.isFlexing}"/>
+                <input class="form-control"  type="text" th:field="*{isFlexing}" id="flexStatus" />
+                <div th:if="${#fields.hasErrors('isFlexing')}" th:errors="*{isFlexing}"></div>
             </div>
             <button  type="submit" class="btn btn-primary">Изменить</button>
     </div>
 
 </form>
-</div>
 
 
 

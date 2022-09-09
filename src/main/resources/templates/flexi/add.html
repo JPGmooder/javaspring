@@ -41,26 +41,31 @@
   </div>
 </nav>
 <div class="container">
-<form action="save" method="post" class="d-flex flex-column align-items-center">
+<form th:object="${flexiki}" action="save" method="post" class="d-flex flex-column align-items-center">
   <div class="mb-3">
     <label for="title">Заголовок</label>
-    <input class="form-control"  type="text" name="title" id="title"/>
+    <input class="form-control"  type="text" th:field="*{flexTitle}" id="title" />
+    <div th:if="${#fields.hasErrors('flexTitle')}" th:errors="*{flexTitle}"></div>
   </div>
   <div class="mb-3">
     <label for="sub">Подпись</label>
-    <input class="form-control"  type="text" name="sub" id="sub"/>
+    <input class="form-control"  type="text" th:field="*{flexSub}" id="sub"/>
+  <div  th:if="${#fields.hasErrors('flexSub')}" th:errors="*{flexSub}"></div>
   </div>
   <div class="mb-3">
     <label for="type">Тип</label>
-    <input class="form-control"  type="text" name="type" id="type"/>
+    <input class="form-control"  type="text" th:field="*{flexType}" id="type" />
+  <div th:if="${#fields.hasErrors('flexType')}" th:errors="*{flexType}"></div>
   </div>
   <div class="mb-3">
     <label for="aboba">Колличество абоб</label>
-    <input class="form-control"  type="number" name="aboba" id="aboba"/>
+    <input class="form-control"  type="number" th:field="*{abobaAmount}" id="aboba"/>
+  <div  th:if="${#fields.hasErrors('abobaAmount')}" th:errors="*{abobaAmount}"></div>
   </div>
   <div class="mb-3">
     <label for="flexStatus">Статус флекса</label>
-    <input class="form-control"  type="text" name="flexStatus" id="flexStatus"/>
+    <input class="form-control"  type="number" th:field="*{isFlexing}" id="flexStatus"  />
+    <div th:if="${#fields.hasErrors('isFlexing')}" th:errors="*{isFlexing}"></div>
   </div>
   <button  type="submit" class="btn btn-primary">Создать флексилку</button>
 </form>
