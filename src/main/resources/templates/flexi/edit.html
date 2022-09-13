@@ -39,6 +39,12 @@
                 <input class="form-control"  type="text" th:field="*{isFlexing}" id="flexStatus" />
                 <div th:if="${#fields.hasErrors('isFlexing')}" th:errors="*{isFlexing}"></div>
             </div>
+        <select class="form-select"  aria-label="Прикрепленный кринж"  name="selectilca">
+            <div class="col-md-3" th:each="el : ${cringe}">
+                <option th:value="*{cringe.id}" th:text="*{cringe.isCringe}" />
+                <option th:value="${el.id}" th:text="${el.isCringe}"/>
+            </div>
+        </select>
             <button  type="submit" class="btn btn-primary">Изменить</button>
     </div>
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -20,14 +21,17 @@ public class crinjoliqueController {
 
         @Autowired
         private crinjolique_repo crinjRepo;
+    @Autowired
+    private flexik_repo flexRepo;
 
-        @GetMapping("/index")
+    @GetMapping("/index")
         String index() {
             return "crinjolique/crinjolique";
         }
 
         @GetMapping("/add")
         String addFlexique(Model model, crinjolique crinjolique) {
+            model.addAttribute("flex", flexRepo.findAll());
             model.addAttribute("crinjolique", crinjolique);
             return "crinjolique/add";
         }
@@ -65,8 +69,10 @@ public class crinjoliqueController {
 
     @PostMapping("/save")
     String createFlex(@ModelAttribute @Valid crinjolique flexiki,
+                      @RequestParam(value = "selectilca") String ID,
                       BindingResult bindingResult,
                       Model model) {
+        flexiki.setFlex(flexRepo.findById(Long.parseLong(ID)).get());
 
         if (bindingResult.hasErrors())
         {
@@ -99,13 +105,23 @@ public class crinjoliqueController {
         if (!crinjRepo.existsById(id)) {
             return "redirect:/crinjolique/check";
         }
-        Optional<crinjolique> crinjolique = crinjRepo.findById(id);
-        model.addAttribute("crinjolique", crinjolique.get());
+        Optional<crinjolique> cringe = crinjRepo.findById(id);
+        var flexes = flexRepo.findAll();
+        List<flexik> filteredList = new ArrayList<flexik>();
+        for (var flex: flexes) {
+            if (flex.getId() != cringe.get().flex.getId())
+            {
+                filteredList.add(flex);
+            }
+        }
+        model.addAttribute("flex", filteredList);
+        model.addAttribute("crinjolique", cringe.get());
         return "crinjolique/edit";
     }
 
     @PostMapping("/edit/{id}")
     public String edit (@PathVariable("id") Long id, @ModelAttribute @Valid crinjolique crinjolique,
+                        @RequestParam(value = "selectilca") String ID,
                         BindingResult bindingResult,
                         Model model) {
 
@@ -120,6 +136,7 @@ public class crinjoliqueController {
         crinj.setCrinjeCount(crinjolique.crinjeCount);
         crinj.setEshePole(crinjolique.eshePole);
         crinj.setEsheodnoPole(crinjolique.esheodnoPole);
+        crinj.setFlex(flexRepo.findById(Long.parseLong(ID)).get());
         crinjRepo.save(crinj);
         return "redirect:/crinjolique/check";
     }

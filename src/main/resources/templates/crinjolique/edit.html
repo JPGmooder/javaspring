@@ -35,6 +35,14 @@
             <input class="form-control"  type="text" th:field="*{esheodnoPole}" id="flexStatus" />
             <div th:if="${#fields.hasErrors('esheodnoPole')}" th:errors="*{esheodnoPole}"></div>
         </div>
+        <select class="form-select mb-5" aria-label="Прикрепленный флекс"  name="selectilca">
+            <div class="form-control col-md-3" th:each="el : ${flex}">
+                <option th:value="*{flex.id}" th:text="*{flex.flexTitle}" />
+                <option th:value="${el.id}" th:text="${el.flexTitle}"/>
+            </div>
+
+        </select>
+
         <button  type="submit" class="btn btn-primary">Изменить кринж</button>
     </form>
 </body>

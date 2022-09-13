@@ -44,7 +44,7 @@
   <form th:object="${crinjolique}" action="save" method="post" class="d-flex flex-column align-items-center">
     <div class="mb-3">
       <label for="title">Имя кринжа</label>
-      <input class="form-control"  type="text" th:field="*{isCringe}" id="title" />
+      <input class="form-control"  type="text" th:field="*{isCringe}" id="title"/>
       <div th:if="${#fields.hasErrors('isCringe')}" th:errors="*{isCringe}"></div>
     </div>
     <div class="mb-3">
@@ -66,6 +66,13 @@
       <label for="flexStatus">Статус Кринжа</label>
       <input class="form-control"  type="text" th:field="*{esheodnoPole}" id="flexStatus" />
       <div th:if="${#fields.hasErrors('esheodnoPole')}" th:errors="*{esheodnoPole}"></div>
+    </div>
+    <div class="mb-3">
+      <select class="form-select" aria-label="Прикрепленный флекс"  name="selectilca">
+        <div class="col-md-3" th:each="el : ${flex}">
+          <option th:value="${el.id}" th:text="${el.flexTitle}"/>
+        </div>
+      </select>
     </div>
     <button  type="submit" class="btn btn-primary">Создать кринжовинку</button>
   </form>

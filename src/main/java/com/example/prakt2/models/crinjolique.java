@@ -1,14 +1,23 @@
 package com.example.prakt2.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
 public class crinjolique {
+
+    @OneToOne(fetch = FetchType.EAGER)
+    public flexik flex;
+
+    public flexik getFlex() {
+        return flex;
+    }
+
+    public void setFlex(flexik flex) {
+        this.flex = flex;
+    }
 
     @GeneratedValue
     @Id
@@ -34,12 +43,13 @@ public class crinjolique {
         return crinjeModifier;
     }
 
-    public crinjolique(String isCringe, String crinjeModifier, String crinjeCount, String eshePole, String esheodnoPole) {
+    public crinjolique(String isCringe, String crinjeModifier, String crinjeCount, String eshePole, String esheodnoPole, flexik flex) {
         this.isCringe = isCringe;
         this.crinjeModifier = crinjeModifier;
         this.crinjeCount = crinjeCount;
         this.eshePole = eshePole;
         this.esheodnoPole = esheodnoPole;
+        this.flex = flex;
     }
 
     public crinjolique() {

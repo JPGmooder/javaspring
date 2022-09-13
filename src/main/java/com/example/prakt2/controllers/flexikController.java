@@ -1,6 +1,8 @@
 package com.example.prakt2.controllers;
 
+import com.example.prakt2.models.crinjolique;
 import com.example.prakt2.models.flexik;
+import com.example.prakt2.repos.crinjolique_repo;
 import com.example.prakt2.repos.flexik_repo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -19,6 +23,9 @@ public class flexikController {
     @Autowired
     private flexik_repo flexikRepo;
 
+    @Autowired
+    private crinjolique_repo cringeRepo;
+
     @GetMapping("/index")
     String index() {
         return "flexi/flexik";
@@ -27,6 +34,7 @@ public class flexikController {
     @GetMapping("/add")
     String addFlexique(Model model, flexik flexiki) {
         model.addAttribute("flexiki", flexiki);
+        model.addAttribute("cringe", cringeRepo.findAll());
         return "flexi/add";
     }
 
@@ -62,9 +70,10 @@ public class flexikController {
 
     @PostMapping("/save")
     String createFlex(@ModelAttribute @Valid flexik flexiki,
+                      @RequestParam(value = "selectilca") String ID,
                       BindingResult bindingResult,
                       Model model) {
-
+        flexiki.setCringe(cringeRepo.findById(Long.parseLong(ID)).get());
         if (bindingResult.hasErrors())
         {
             model.addAttribute("flexiki", flexiki);
@@ -97,6 +106,15 @@ public class flexikController {
             return "redirect:/flexiki/check";
         }
         Optional<flexik> flexik = flexikRepo.findById(id);
+        var cringes = cringeRepo.findAll();
+        List<crinjolique> filteredList = new ArrayList<crinjolique>();
+        for (var cringe: cringes) {
+            if (flexik.get().cringe.id != cringe.id)
+            {
+                filteredList.add(cringe);
+            }
+        }
+        model.addAttribute("cringe", filteredList);
         model.addAttribute("flexiki", flexik.get());
         return "flexi/edit";
     }
@@ -124,7 +142,8 @@ public class flexikController {
 
     @PostMapping("/edit/{id}")
     String edit(@PathVariable("id") Long id, @ModelAttribute @Valid flexik flexiki,
-                      BindingResult bindingResult,
+                @RequestParam(value = "selectilca") String ID,
+                BindingResult bindingResult,
                       Model model) {
 
         if (bindingResult.hasErrors())
@@ -134,17 +153,14 @@ public class flexikController {
         }
 
         flexik flexik = flexikRepo.findById(id).orElseThrow();
-
         flexik.setFlexTitle(flexiki.getFlexTitle());
         flexik.setFlexSub(flexiki.getFlexSub());
         flexik.setAbobaAmount(flexiki.getAbobaAmount());
         flexik.setFlexType(flexiki.getFlexType());
         flexik.setIsFlexing(flexiki.getIsFlexing());
+        flexiki.setCringe(cringeRepo.findById(Long.parseLong(ID)).get());
         flexikRepo.save(flexik);
         return "flexi/flexik";
 
     }
-
-
-
 }
