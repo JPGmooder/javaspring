@@ -42,7 +42,7 @@ public class flexik {
         this.cringe = cringe;
     }
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "flex")
     public crinjolique cringe;
     public flexik(String flexType, String flexTitle, String isFlexing, String flexSub, String abobaAmount, crinjolique cringe, Collection<Worker> students) {
         this.flexType = flexType;

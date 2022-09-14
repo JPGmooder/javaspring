@@ -1,9 +1,10 @@
 package com.example.prakt2.controllers;
 
-import com.example.prakt2.models.Roles;
+import com.example.prakt2.models.Role;
 import com.example.prakt2.models.User;
 import com.example.prakt2.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,8 @@ import java.util.Collections;
 
 @Controller
 public class RegistrationController {
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     UserRepository userRepository;
 
@@ -32,7 +34,8 @@ public class RegistrationController {
             return "registration";
         }
         user.setActive(true);
-        user.setRoles(Collections.singleton(Roles.User));
+        user.setRoles(Collections.singleton(Role.ADMIN));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return "redirect:/login";
     }

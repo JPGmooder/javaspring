@@ -13,7 +13,7 @@ public class User {
         this.username = username;
     }
 
-    public User(String username, String password, boolean isActive, Set<Roles> roles) {
+    public User(String username, String password, boolean isActive, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.isActive = true;
@@ -39,11 +39,11 @@ public class User {
         isActive = active;
     }
 
-    public Set<Roles> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Roles> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
@@ -54,10 +54,10 @@ public class User {
     private String password;
     private boolean isActive;
 
-    @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Roles> roles;
+    private Set<Role> roles;
     public void setId(Long id) {
         this.id = id;
     }
